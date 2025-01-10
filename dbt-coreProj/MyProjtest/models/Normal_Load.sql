@@ -10,4 +10,4 @@ select
     column1,
     column2,
     column3
-from test2
+from test3

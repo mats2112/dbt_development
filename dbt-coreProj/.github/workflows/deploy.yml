@@ -1,0 +1,27 @@
+name: Deploy to GCP
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: '359.0.0'
+
+      - name: Authenticate to Google Cloud
+        run: echo "{{ secrets.GCP_SA_KEY }}" | gcloud auth activate-service-account --key-file=/dev/stdin
+
+      - name: Deploy files to GCS
+        run: |
+          # Replace 'assets' with your specific project directory (e.g., 'build', 'dist', etc.)
+          gsutil cp -r ./assets gs://us-central1-dbtautomate-10bdd944-bucket
